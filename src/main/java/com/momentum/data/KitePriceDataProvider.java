@@ -26,11 +26,16 @@ public class KitePriceDataProvider implements PriceDataProvider {
     private final Map<String, Long> symbolToToken = new HashMap<>();
     private final long              apiDelayMs;
 
+    // Kite API limit for 'day' interval: 2000 calendar days per request (~5.5 years).
+    // Requests spanning more than this silently return empty data.
+    private static final int MAX_CHUNK_DAYS = 2000;
+
     // Running counters for the current fetch session
-    private int fetchedCount  = 0;
+    private int fetchedCount   = 0;
     private int skippedNoToken = 0;
     private int skippedNoData  = 0;
     private int fetchErrors    = 0;
+    private int chunkErrors    = 0;
 
     public KitePriceDataProvider(MomentumConfig config) {
         this.config    = config;
@@ -175,11 +180,12 @@ public class KitePriceDataProvider implements PriceDataProvider {
     public void close() {
         int total = fetchedCount + skippedNoToken + skippedNoData + fetchErrors;
         LOG.info("KitePriceDataProvider.close() — session summary:"
-                + "  fetched="  + fetchedCount
-                + "  noToken="  + skippedNoToken
-                + "  noData="   + skippedNoData
-                + "  errors="   + fetchErrors
-                + "  total="    + total);
+                + "  fetched="      + fetchedCount
+                + "  noToken="      + skippedNoToken
+                + "  noData="       + skippedNoData
+                + "  errors="       + fetchErrors
+                + "  chunkErrors="  + chunkErrors
+                + "  total="        + total);
 
         if (fetchErrors > 0 && fetchedCount == 0) {
             LOG.severe("ALL " + fetchErrors + " data fetches failed with errors. "
@@ -213,30 +219,75 @@ public class KitePriceDataProvider implements PriceDataProvider {
             return Collections.emptyList();
         }
 
+        // Split range into chunks to stay within the Kite 2000-day-per-request limit.
+        List<Date[]> chunks = buildChunks(from, to, MAX_CHUNK_DAYS);
         LOG.info("Fetching [" + symbol + "]  token=" + token
-                + "  from=" + fmtDate(from) + "  to=" + fmtDate(to));
+                + "  from=" + fmtDate(from) + "  to=" + fmtDate(to)
+                + "  chunks=" + chunks.size());
 
+        List<DailyPrice> allPrices = new ArrayList<>();
+        int chunkNum = 0;
+        for (Date[] chunk : chunks) {
+            chunkNum++;
+            if (chunks.size() > 1) {
+                LOG.info("  [" + symbol + "] chunk " + chunkNum + "/" + chunks.size()
+                        + "  " + fmtDate(chunk[0]) + " → " + fmtDate(chunk[1]));
+            }
+            List<DailyPrice> part = fetchChunk(symbol, token, chunk[0], chunk[1]);
+            allPrices.addAll(part);
+            if (chunkNum < chunks.size()) sleep(); // rate-limit between chunks
+        }
+
+        if (allPrices.isEmpty()) {
+            LOG.warning("No daily candles for " + symbol
+                    + "  range=[" + fmtDate(from) + " → " + fmtDate(to) + "]"
+                    + "  chunks=" + chunks.size());
+            skippedNoData++;
+            return Collections.emptyList();
+        }
+
+        // Sort and deduplicate by date (chunks are contiguous, but be safe)
+        allPrices.sort(Comparator.comparing(p -> p.date));
+
+        LOG.info("  OK " + symbol + " — " + allPrices.size() + " candles total"
+                + "  first=" + fmtDate(allPrices.get(0).date)
+                + "  last="  + fmtDate(allPrices.get(allPrices.size() - 1).date)
+                + "  lastClose=" + allPrices.get(allPrices.size() - 1).close);
+
+        fetchedCount++;
+        sleep();
+        return allPrices;
+    }
+
+    /**
+     * Fetches a single chunk of daily OHLCV data from the Kite API.
+     * Caller is responsible for ensuring the chunk is within the 2000-day limit.
+     */
+    private List<DailyPrice> fetchChunk(String symbol, long token, Date from, Date to) {
         HistoricalData result;
         try {
-            result = kite.getHistoricalData(from, to, String.valueOf(token), "day", false, false);
+            result = kite.getHistoricalData(
+                    from, to, String.valueOf(token), "day", false, false);
         } catch (Throwable t) {
             LOG.warning("getHistoricalData FAILED for " + symbol
-                    + ": " + t.getClass().getSimpleName() + ": " + t.getMessage());
+                    + "  chunk=[" + fmtDate(from) + " → " + fmtDate(to) + "]"
+                    + "  " + t.getClass().getSimpleName() + ": " + t.getMessage());
             fetchErrors++;
+            chunkErrors++;
             return Collections.emptyList();
         }
 
         if (result == null) {
-            LOG.warning("getHistoricalData returned NULL for " + symbol);
-            skippedNoData++;
+            LOG.warning("getHistoricalData returned NULL for " + symbol
+                    + "  chunk=[" + fmtDate(from) + " → " + fmtDate(to) + "]");
+            chunkErrors++;
             return Collections.emptyList();
         }
 
         if (result.dataArrayList == null || result.dataArrayList.isEmpty()) {
-            LOG.warning("No daily candles returned for " + symbol
-                    + "  range=[" + fmtDate(from) + " → " + fmtDate(to) + "]"
+            LOG.warning("Empty dataArrayList for " + symbol
+                    + "  chunk=[" + fmtDate(from) + " → " + fmtDate(to) + "]"
                     + "  result.open=" + result.open + "  result.close=" + result.close);
-            skippedNoData++;
             return Collections.emptyList();
         }
 
@@ -248,17 +299,30 @@ public class KitePriceDataProvider implements PriceDataProvider {
             prices.add(new DailyPrice(symbol, barDate,
                     bar.open, bar.high, bar.low, bar.close, bar.volume));
         }
-        prices.sort(Comparator.comparing(p -> p.date));
-
-        LOG.info("  OK " + symbol + " — " + prices.size() + " candles"
-                + (parseErrors > 0 ? "  parseErrors=" + parseErrors : "")
-                + "  first=" + fmtDate(prices.get(0).date)
-                + "  last="  + fmtDate(prices.get(prices.size() - 1).date)
-                + "  lastClose=" + prices.get(prices.size() - 1).close);
-
-        fetchedCount++;
-        sleep();
+        if (parseErrors > 0) {
+            LOG.warning("  " + symbol + " chunk=[" + fmtDate(from) + " → " + fmtDate(to) + "]"
+                    + "  parseErrors=" + parseErrors);
+        }
         return prices;
+    }
+
+    /**
+     * Splits [from, to] into consecutive sub-ranges of at most maxDays calendar days each.
+     * E.g. a 3000-day range with maxDays=2000 → two chunks: [from, from+1999] and [from+2000, to].
+     */
+    private static List<Date[]> buildChunks(Date from, Date to, int maxDays) {
+        List<Date[]> chunks = new ArrayList<>();
+        Calendar cur = Calendar.getInstance();
+        cur.setTime(from);
+        while (!cur.getTime().after(to)) {
+            Date chunkFrom = cur.getTime();
+            cur.add(Calendar.DATE, maxDays - 1);
+            Date chunkTo = cur.getTime().after(to) ? to : cur.getTime();
+            chunks.add(new Date[]{chunkFrom, chunkTo});
+            cur.setTime(chunkTo);
+            cur.add(Calendar.DATE, 1);
+        }
+        return chunks;
     }
 
     // -------------------------------------------------------------------------
