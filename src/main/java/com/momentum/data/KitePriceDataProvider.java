@@ -47,6 +47,36 @@ public class KitePriceDataProvider implements PriceDataProvider {
         LOG.info("KitePriceDataProvider.init() — authenticating via KiteSessionManager");
         kite = KiteSessionManager.getConnection();
 
+        // ---- Token validity check ----
+        // Make a lightweight profile call before bulk fetching.
+        // If the token is expired Kite returns HTTP 403 immediately here,
+        // giving a clear error rather than silently failing 500+ data calls.
+        LOG.info("Verifying access token via getProfile()...");
+        try {
+            com.zerodhatech.models.Profile profile = kite.getProfile();
+            LOG.info("Token valid — logged in as: "
+                    + profile.userName + " (" + profile.userShortname + ")"
+                    + "  email=" + profile.email
+                    + "  broker=" + profile.broker);
+        } catch (com.zerodhatech.kiteconnect.kitehttp.exceptions.KiteException ke) {
+            String msg = ke.getMessage() != null ? ke.getMessage().toLowerCase() : "";
+            if (msg.contains("token") || msg.contains("invalid") || msg.contains("403")
+                    || ke.code == 403) {
+                LOG.severe("ACCESS TOKEN EXPIRED or INVALID (HTTP " + ke.code + "): " + ke.getMessage());
+                throw new Exception(
+                    "Access token is expired or invalid.\n"
+                    + "Run  update-tokens.bat  in C:\\bot  to refresh your daily token,\n"
+                    + "then restart the application.\n"
+                    + "(Kite error: " + ke.getMessage() + ")");
+            }
+            LOG.severe("getProfile() failed (KiteException " + ke.code + "): " + ke.getMessage());
+            throw new Exception("Kite API error during token check: " + ke.getMessage(), ke);
+        } catch (Throwable t) {
+            LOG.severe("getProfile() failed unexpectedly: " + t.getMessage());
+            throw new Exception("Failed to verify Kite token: " + t.getMessage(), t);
+        }
+
+        // ---- Instrument catalogue ----
         LOG.info("Fetching NSE instrument catalogue from Kite...");
         long t0 = System.currentTimeMillis();
         List<Instrument> instruments;
@@ -69,6 +99,11 @@ public class KitePriceDataProvider implements PriceDataProvider {
                 + "  mapped=" + mapped
                 + "  elapsed=" + elapsed + "ms");
 
+        if (mapped == 0) {
+            LOG.severe("Instrument catalogue is EMPTY — cannot map any symbols to tokens");
+            throw new Exception("NSE instrument catalogue returned 0 instruments.");
+        }
+
         // Reset session counters
         fetchedCount   = 0;
         skippedNoToken = 0;
@@ -78,11 +113,29 @@ public class KitePriceDataProvider implements PriceDataProvider {
 
     @Override
     public void close() {
+        int total = fetchedCount + skippedNoToken + skippedNoData + fetchErrors;
         LOG.info("KitePriceDataProvider.close() — session summary:"
-                + "  fetched="     + fetchedCount
-                + "  noToken="     + skippedNoToken
-                + "  noData="      + skippedNoData
-                + "  errors="      + fetchErrors);
+                + "  fetched="  + fetchedCount
+                + "  noToken="  + skippedNoToken
+                + "  noData="   + skippedNoData
+                + "  errors="   + fetchErrors
+                + "  total="    + total);
+
+        if (fetchErrors > 0 && fetchedCount == 0) {
+            LOG.severe("ALL " + fetchErrors + " data fetches failed with errors. "
+                    + "Most likely cause: access token expired. "
+                    + "Run update-tokens.bat in C:\\bot and restart.");
+        } else if (fetchErrors > 0) {
+            LOG.warning(fetchErrors + " symbols had fetch errors — check WARNING lines above for details.");
+        }
+        if (skippedNoToken > 0) {
+            LOG.warning(skippedNoToken + " symbols had no Kite instrument token — "
+                    + "run TokenExporter to identify them.");
+        }
+        if (fetchedCount == 0) {
+            LOG.severe("No data was fetched for ANY symbol. Backtest will fail. "
+                    + "Check token expiry and network connectivity.");
+        }
     }
 
     // -------------------------------------------------------------------------

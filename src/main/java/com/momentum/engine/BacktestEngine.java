@@ -93,8 +93,15 @@ public class BacktestEngine {
                 + " symbols with data  (" + fetchElapsed + "ms)");
 
         if (priceHistory.isEmpty()) {
-            LOG.severe("No price data available — cannot run backtest");
-            throw new RuntimeException("No price data available for any symbol in the universe.");
+            LOG.severe("No price data returned for ANY of the " + universe.size()
+                    + " universe symbols after " + fetchElapsed + "ms. "
+                    + "Most likely causes: (1) access token expired — run update-tokens.bat in C:\\bot, "
+                    + "(2) date range has no market data, "
+                    + "(3) all symbols unmatched in instrument catalogue.");
+            throw new RuntimeException(
+                    "No price data available for any symbol.\n"
+                    + "Most likely: access token is expired.\n"
+                    + "Fix: run  update-tokens.bat  in C:\\bot, then retry.");
         }
 
         // 3. Identify rebalance dates (Mondays)
