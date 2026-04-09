@@ -9,22 +9,25 @@ import com.momentum.strategy.TopNMomentumStrategy;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Main application window.
  *
  * Layout (BorderLayout):
- *   NORTH  - InputPanel   (date pickers, Run button, progress bar)
- *   CENTER - NavChartPanel (JFreeChart daily NAV)
- *   SOUTH  - JTabbedPane  (Daily NAV table | Weekly Summary table)
- *   EAST   - MetricsPanel (performance metrics)
+ *   NORTH  — InputPanel   (date pickers, Run button, progress bar)
+ *   CENTER — NavChartPanel (JFreeChart daily NAV)
+ *   SOUTH  — JTabbedPane  (Daily NAV table | Weekly Summary table)
+ *   EAST   — MetricsPanel (performance metrics)
  */
 public class MomentumApp extends JFrame {
 
-    private final MomentumConfig config;
+    private static final Logger LOG = Logger.getLogger(MomentumApp.class.getName());
 
+    private final MomentumConfig           config;
     private final InputPanel               inputPanel;
     private final NavChartPanel            chartPanel;
     private final DailyNavTablePanel       dailyTable;
@@ -34,6 +37,7 @@ public class MomentumApp extends JFrame {
     public MomentumApp(MomentumConfig config) {
         super("Nifty 500 Momentum Backtest — Equity Strategy Platform");
         this.config = config;
+        LOG.info("MomentumApp UI initialising");
 
         inputPanel   = new InputPanel();
         chartPanel   = new NavChartPanel();
@@ -41,19 +45,17 @@ public class MomentumApp extends JFrame {
         weeklyTable  = new WeeklySummaryTablePanel();
         metricsPanel = new MetricsPanel();
 
-        // Tabbed pane for the two tables (placed at SOUTH)
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setBackground(new Color(25, 25, 50));
         tabbedPane.setForeground(Color.LIGHT_GRAY);
-        tabbedPane.addTab("Daily NAV",       dailyTable);
-        tabbedPane.addTab("Weekly Summary",  weeklyTable);
+        tabbedPane.addTab("Daily NAV",      dailyTable);
+        tabbedPane.addTab("Weekly Summary", weeklyTable);
         tabbedPane.setPreferredSize(new Dimension(0, 260));
 
-        // Main content (center + south in a sub-panel)
         JPanel center = new JPanel(new BorderLayout());
         center.setBackground(new Color(20, 20, 40));
-        center.add(chartPanel,  BorderLayout.CENTER);
-        center.add(tabbedPane,  BorderLayout.SOUTH);
+        center.add(chartPanel, BorderLayout.CENTER);
+        center.add(tabbedPane, BorderLayout.SOUTH);
 
         getContentPane().setBackground(new Color(20, 20, 40));
         setLayout(new BorderLayout());
@@ -67,6 +69,8 @@ public class MomentumApp extends JFrame {
         setSize(1200, 780);
         setLocationRelativeTo(null);
         setVisible(true);
+
+        LOG.info("MomentumApp UI ready");
     }
 
     // -------------------------------------------------------------------------
@@ -77,7 +81,13 @@ public class MomentumApp extends JFrame {
         Date fromDate = inputPanel.getFromDate();
         Date toDate   = inputPanel.getToDate();
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        LOG.info("Run button clicked — from=" + sdf.format(fromDate)
+                + "  to=" + sdf.format(toDate));
+
         if (!fromDate.before(toDate)) {
+            LOG.warning("Invalid date range: from=" + sdf.format(fromDate)
+                    + " is not before to=" + sdf.format(toDate));
             JOptionPane.showMessageDialog(this,
                     "\"From Date\" must be before \"To Date\".",
                     "Invalid Date Range", JOptionPane.WARNING_MESSAGE);
@@ -92,9 +102,8 @@ public class MomentumApp extends JFrame {
         inputPanel.setRunning(true);
         inputPanel.setStatus("Initialising...");
 
-        // Run backtest on background thread
-        BacktestWorker worker = new BacktestWorker(fromDate, toDate);
-        worker.execute();
+        LOG.info("Launching BacktestWorker on background thread");
+        new BacktestWorker(fromDate, toDate).execute();
     }
 
     // -------------------------------------------------------------------------
@@ -105,6 +114,7 @@ public class MomentumApp extends JFrame {
 
         private final Date fromDate;
         private final Date toDate;
+        private final long startTime = System.currentTimeMillis();
 
         BacktestWorker(Date fromDate, Date toDate) {
             this.fromDate = fromDate;
@@ -113,13 +123,14 @@ public class MomentumApp extends JFrame {
 
         @Override
         protected BacktestResult doInBackground() throws Exception {
+            LOG.info("BacktestWorker.doInBackground() — starting");
             KitePriceDataProvider dataProvider = new KitePriceDataProvider(config);
             TopNMomentumStrategy  strategy     = new TopNMomentumStrategy(config.getTopN());
             BacktestEngine        engine       = new BacktestEngine(config, dataProvider, strategy);
 
             BacktestEngine.ProgressListener listener = (done, total, symbol) -> {
-                int pct = (total > 0) ? (done * 100 / total) : 0;
-                publish("Fetching " + symbol + " (" + done + "/" + total + ")");
+                String msg = "Fetching " + symbol + " (" + done + "/" + total + ")";
+                publish(msg);
                 SwingUtilities.invokeLater(() ->
                         inputPanel.setProgress(done, total, done + "/" + total));
             };
@@ -130,27 +141,41 @@ public class MomentumApp extends JFrame {
         @Override
         protected void process(List<String> chunks) {
             if (!chunks.isEmpty()) {
-                inputPanel.setStatus(chunks.get(chunks.size() - 1));
+                String last = chunks.get(chunks.size() - 1);
+                inputPanel.setStatus(last);
+                LOG.fine("Progress: " + last);
             }
         }
 
         @Override
         protected void done() {
+            long elapsed = System.currentTimeMillis() - startTime;
             inputPanel.setRunning(false);
             try {
                 BacktestResult result = get();
+                LOG.info("BacktestWorker.done() — success"
+                        + "  elapsed=" + elapsed + "ms"
+                        + "  days=" + result.dailySnapshots.size()
+                        + "  weeks=" + result.weeklySummaries.size()
+                        + "  trades=" + result.trades.size());
+
                 chartPanel .update(result.dailySnapshots);
                 dailyTable .update(result.dailySnapshots);
                 weeklyTable.update(result.weeklySummaries);
                 metricsPanel.update(result);
-                inputPanel.setStatus("Backtest complete. "
+
+                String summary = "Done in " + (elapsed / 1000) + "s — "
                         + result.dailySnapshots.size() + " days, "
-                        + result.trades.size() + " trades.");
+                        + result.trades.size() + " trades.";
+                inputPanel.setStatus(summary);
+                LOG.info(summary);
+
             } catch (Exception ex) {
-                String msg = ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage();
-                inputPanel.setStatus("Error: " + msg);
+                Throwable cause = ex.getCause() != null ? ex.getCause() : ex;
+                LOG.severe("BacktestWorker FAILED after " + elapsed + "ms: " + cause.getMessage());
+                inputPanel.setStatus("Error: " + cause.getMessage());
                 JOptionPane.showMessageDialog(MomentumApp.this,
-                        "Backtest failed:\n" + msg,
+                        "Backtest failed:\n" + cause.getMessage(),
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
