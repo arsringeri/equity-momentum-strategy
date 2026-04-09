@@ -1,0 +1,550 @@
+symbol,name
+RELIANCE,Reliance Industries
+TCS,Tata Consultancy Services
+HDFCBANK,HDFC Bank
+INFY,Infosys
+ICICIBANK,ICICI Bank
+HINDUNILVR,Hindustan Unilever
+ITC,ITC
+SBIN,State Bank of India
+BHARTIARTL,Bharti Airtel
+KOTAKBANK,Kotak Mahindra Bank
+LT,Larsen & Toubro
+AXISBANK,Axis Bank
+ASIANPAINT,Asian Paints
+BAJFINANCE,Bajaj Finance
+TITAN,Titan Company
+MARUTI,Maruti Suzuki
+WIPRO,Wipro
+HCLTECH,HCL Technologies
+TECHM,Tech Mahindra
+SUNPHARMA,Sun Pharmaceutical
+DRREDDY,Dr. Reddy's Laboratories
+CIPLA,Cipla
+ONGC,Oil & Natural Gas Corporation
+COALINDIA,Coal India
+NTPC,NTPC
+POWERGRID,Power Grid Corporation
+BPCL,Bharat Petroleum
+IOC,Indian Oil Corporation
+GAIL,GAIL India
+HEROMOTOCO,Hero MotoCorp
+BAJAJ-AUTO,Bajaj Auto
+EICHERMOT,Eicher Motors
+TATAMOTORS,Tata Motors
+TATASTEEL,Tata Steel
+HINDALCO,Hindalco Industries
+JSWSTEEL,JSW Steel
+TATACONSUM,Tata Consumer Products
+BRITANNIA,Britannia Industries
+NESTLEIND,Nestle India
+DABUR,Dabur India
+MARICO,Marico
+GODREJCP,Godrej Consumer Products
+PIDILITIND,Pidilite Industries
+COLPAL,Colgate-Palmolive India
+BERGEPAINT,Berger Paints
+EMAMILTD,Emami
+MCDOWELL-N,United Spirits
+TATAPOWER,Tata Power
+ADANIPORTS,Adani Ports & SEZ
+ADANIENT,Adani Enterprises
+ADANIGREEN,Adani Green Energy
+ADANITRANS,Adani Transmission
+SIEMENS,Siemens
+ABB,ABB India
+HAVELLS,Havells India
+VOLTAS,Voltas
+CUMMINSIND,Cummins India
+BOSCHLTD,Bosch
+SCHAEFFLER,Schaeffler India
+TIMKEN,Timken India
+SKFINDIA,SKF India
+BHEL,Bharat Heavy Electricals
+HAL,Hindustan Aeronautics
+BEL,Bharat Electronics
+BEML,BEML
+SAIL,Steel Authority of India
+NMDC,NMDC
+NALCO,National Aluminium
+HINDCOPPER,Hindustan Copper
+APLAPOLLO,APL Apollo Tubes
+TATAELXSI,Tata Elxsi
+MPHASIS,Mphasis
+LTTS,L&T Technology Services
+COFORGE,Coforge
+PERSISTENT,Persistent Systems
+KPITTECH,KPIT Technologies
+IRCTC,Indian Railway Catering & Tourism
+DMART,Avenue Supermarts
+TRENT,Trent
+NAUKRI,Info Edge (India)
+ZOMATO,Zomato
+PAYTM,One 97 Communications
+NYKAA,FSN E-Commerce Ventures
+DELHIVERY,Delhivery
+POLICYBZR,PB Fintech
+MAPMYINDIA,C.E. Info Systems
+APOLLOHOSP,Apollo Hospitals
+DIVISLAB,Divi's Laboratories
+HDFCLIFE,HDFC Life Insurance
+SBILIFE,SBI Life Insurance
+ICICIGI,ICICI Lombard General Insurance
+ICICIPRULI,ICICI Prudential Life Insurance
+BAJAJFINSV,Bajaj Finserv
+CHOLAFIN,Cholamandalam Investment
+MUTHOOTFIN,Muthoot Finance
+MANAPPURAM,Manappuram Finance
+LICHSGFIN,LIC Housing Finance
+RECLTD,REC
+HUDCO,Housing & Urban Development Corporation
+IRFC,Indian Railway Finance Corporation
+BANKBARODA,Bank of Baroda
+PNB,Punjab National Bank
+CANBK,Canara Bank
+UNIONBANK,Union Bank of India
+IDFCFIRSTB,IDFC First Bank
+FEDERALBNK,Federal Bank
+INDUSINDBK,IndusInd Bank
+RBLBANK,RBL Bank
+AUBANK,AU Small Finance Bank
+UJJIVANSFB,Ujjivan Small Finance Bank
+BANDHANBNK,Bandhan Bank
+IDFC,IDFC
+ULTRACEMCO,UltraTech Cement
+SHREECEM,Shree Cement
+AMBUJACEM,Ambuja Cements
+ACC,ACC
+JKLAKSHMI,JK Lakshmi Cement
+HEIDELBERG,HeidelbergCement India
+DALBHARAT,Dalmia Bharat
+NUVOCO,Nuvoco Vistas Corporation
+GRASIM,Grasim Industries
+CESC,CESC
+TORNTPOWER,Torrent Power
+JSWENERGY,JSW Energy
+SJVN,SJVN
+NHPC,NHPC
+NLCINDIA,NLC India
+SUZLON,Suzlon Energy
+INOXWIND,Inox Wind
+M&M,Mahindra & Mahindra
+ASHOKLEY,Ashok Leyland
+TVSMOTOR,TVS Motor Company
+BAJAJ-AUTO,Bajaj Auto
+EXIDEIND,Exide Industries
+AMARARAJA,Amara Raja Batteries
+MOTHERSON,Samvardhana Motherson International
+SUNDRMFAST,Sundram Fasteners
+BHARATFORG,Bharat Forge
+ENDURANCE,Endurance Technologies
+SUPRAJIT,Suprajit Engineering
+LUPIN,Lupin
+ASTRAZEN,AstraZeneca Pharma India
+ALKEM,Alkem Laboratories
+TORNTPHARM,Torrent Pharmaceuticals
+GLENMARK,Glenmark Pharmaceuticals
+IPCALAB,IPCA Laboratories
+NATCOPHARM,Natco Pharma
+AJANTPHARM,Ajanta Pharma
+ZYDUSLIFE,Zydus Lifesciences
+GRANULES,Granules India
+SOLARA,Solara Active Pharma Sciences
+CAPLIPOINT,Caplin Point Laboratories
+PFIZER,Pfizer
+GLAXO,GlaxoSmithKline Pharmaceuticals
+ABBOTINDIA,Abbott India
+SANOFI,Sanofi India
+STAR,Star Health and Allied Insurance
+NIACL,New India Assurance
+GICRE,General Insurance Corporation of India
+LTFH,L&T Finance Holdings
+JIOFIN,Jio Financial Services
+HDFCAMC,HDFC AMC
+NAM-INDIA,Nippon India Mutual Fund
+UTIAMC,UTI AMC
+KFIN,KFin Technologies
+CAMS,Computer Age Management Services
+BSE,BSE
+CDSL,Central Depository Services India
+MCX,Multi Commodity Exchange of India
+IEX,Indian Energy Exchange
+ANGELONE,Angel One
+MOTILALOFS,Motilal Oswal Financial Services
+EDELWEISS,Edelweiss Financial Services
+EMKAY,Emkay Global Financial Services
+MFSL,Max Financial Services
+MAXHEALTH,Max Healthcare Institute
+FORTIS,Fortis Healthcare
+NARAYANA,Narayana Hrudayalaya
+KIMS,Krishna Institute of Medical Sciences
+RAINBOW,Rainbow Children's Medicare
+YATHARTH,Yatharth Hospital & Trauma Care Services
+SHALBY,Shalby
+LALPATHLAB,Dr. Lal PathLabs
+METROPOLIS,Metropolis Healthcare
+THYROCARE,Thyrocare Technologies
+KRSNAA,Krsnaa Diagnostics
+VIJAYA,Vijaya Diagnostic Centre
+DRREDDYLAB,Dr. Reddy's Laboratories
+SYNGENE,Syngene International
+STRIDES,Strides Pharma Science
+GLAND,Gland Pharma
+LAURUSLABS,Laurus Labs
+DIVIS,Divi's Laboratories
+BIOCON,Biocon
+SEQUENT,Sequent Scientific
+PIRAMALPHM,Piramal Pharma
+SUNPHARMA,Sun Pharmaceutical Industries
+MANKIND,Mankind Pharma
+JBCHEPHARM,J.B. Chemicals & Pharmaceuticals
+TATACOMM,Tata Communications
+ROUTE,Route Mobile
+TANLA,Tanla Platforms
+ONMOBILE,OnMobile Global
+STLTECH,Sterlite Technologies
+HFCL,HFCL
+TEJAS,Tejas Networks
+ITI,ITI
+RAILTEL,RailTel Corporation
+BHARAT DYNAMICS,Bharat Dynamics
+GRSE,Garden Reach Shipbuilders & Engineers
+COCHINSHIP,Cochin Shipyard
+MAZDOCK,Mazagon Dock Shipbuilders
+BEML,BEML
+MIDHANI,Mishra Dhatu Nigam
+IRCON,IRCON International
+RITES,RITES
+NBCC,NBCC (India)
+NCC,NCC
+PNC,PNC Infratech
+KNRCON,KNR Constructions
+HG INFRA,H.G. Infra Engineering
+AHLUWALIA,Ahluwalia Contracts
+ENGINERSIN,Engineers India
+THERMAX,Thermax
+HONAUT,Honeywell Automation India
+GMRINFRA,GMR Airports Infrastructure
+AIAENG,AIA Engineering
+ELGIEQUIP,Elgi Equipments
+KIRLOSENG,Kirloskar Electric Company
+BHEL,Bharat Heavy Electricals
+KALPATPOWR,KEC International
+KECINTELE,KEC International
+PRAJ,Praj Industries
+JYOTICNC,Jyoti CNC Automation
+LAKSHMIMC,Laxmi Machine Works
+GRINDWELL,Grindwell Norton
+CARBORUNDUM,Carborundum Universal
+ISGEC,ISGEC Heavy Engineering
+TEXMOPIPES,Texmo Pipes and Products
+APARINDS,Apar Industries
+POLYCAB,Polycab India
+KEI,KEI Industries
+FINOLEX,Finolex Cables
+HAVELLS,Havells India
+CGPOWER,CG Power and Industrial Solutions
+CG,Crompton Greaves Consumer Electricals
+CROMPTON,Crompton Greaves Consumer Electricals
+VGUARD,V-Guard Industries
+ORIENT,Orient Electric
+ORIENTELEC,Orient Electric
+BAJAJELECP,Bajaj Electricals
+HAVELLS,Havells India
+BLUESTAR,Blue Star
+VOLTAS,Voltas
+WHIRLPOOL,Whirlpool of India
+SYMPHONY,Symphony
+ACRYSIL,Acrysil
+CERA,Cera Sanitaryware
+KAJARIA,Kajaria Ceramics
+SOMANY,Somany Ceramics
+KAJARIACER,Kajaria Ceramics
+ASTRAL,Astral
+SUPREME,Supreme Industries
+SUPREMEIND,Supreme Industries
+PRINCEPIPES,Prince Pipes and Fittings
+FILATEX,Filatex India
+SRF,SRF
+ATUL,Atul
+DEEPAKNI,Deepak Nitrite
+DEEPAKNTR,Deepak Nitrite
+NAVINFLUOR,Navin Fluorine International
+FLUOROCHEM,Gujarat Fluorochemicals
+ALKYLAMINE,Alkyl Amines Chemicals
+BALCHEMLTD,Balaji Amines
+NOCIL,NOCIL
+TATACHEMLTD,Tata Chemicals
+TATACHEM,Tata Chemicals
+GSFC,Gujarat State Fertilizers & Chemicals
+GNFC,Gujarat Narmada Valley Fertilizers & Chemicals
+CHAMBLFER,Chambal Fertilisers & Chemicals
+CHAMBLFERT,Chambal Fertilisers & Chemicals
+COROMANDEL,Coromandel International
+RCFLTD,Rashtriya Chemicals & Fertilizers
+FACT,Fertilisers and Chemicals Travancore
+PIIND,PI Industries
+UPL,UPL
+BAYER,Bayer CropScience
+INSECTICIDE,Insecticides India
+DHANUKA,Dhanuka Agritech
+AVANTIFEED,Avanti Feeds
+WATERBASE,Waterbase
+GODREJAGRO,Godrej Agrovet
+VENKEYS,Venky's India
+HATSUN,Hatsun Agro Product
+PARAG,Parag Milk Foods
+TASTY BITE,Tasty Bite Eatables
+VSTIND,VST Industries
+GODFRYPHLP,Godfrey Phillips India
+ITC,ITC
+PATANJALI,Patanjali Foods
+KRBL,KRBL
+LTFOODS,LT Foods
+RUCHI SOYA,Patanjali Foods
+BAJAJCON,Bajaj Consumer Care
+EMAMILTD,Emami
+JYOTHYLAB,Jyothy Labs
+GILLETTE,Gillette India
+PGHH,Procter & Gamble Hygiene & Health Care
+BIKAJI,Bikaji Foods International
+DEVYANI,Devyani International
+SAPPHIRE,Sapphire Foods India
+WESTLIFE,Westlife Foodworld
+JUBLFOOD,Jubilant Foodworks
+TRENTLTD,Trent
+VMART,V-Mart Retail
+SHOPERSTOP,Shoppers Stop
+ARVIND,Arvind
+ABFRL,Aditya Birla Fashion and Retail
+RAYMOND,Raymond
+GOKALDAS,Gokaldas Exports
+WELSPUNLIV,Welspun Living
+ALOKTEXT,Alok Industries
+PAGEIND,Page Industries
+VARDHMAN,Vardhman Textiles
+SPANDANA,Spandana Sphoorty Financial
+CREDITACC,CreditAccess Grameen
+HOMEFIRST,Home First Finance Company India
+AAVAS,Aavas Financiers
+CANFINHOME,Can Fin Homes
+APTUS,Aptus Value Housing Finance
+REPCO,Repco Home Finance
+POONAWALLA,Poonawalla Fincorp
+JMFINANCIL,JM Financial
+MOTILALOSW,Motilal Oswal Financial Services
+GEOJITFSL,Geojit Financial Services
+MASTEK,Mastek
+HEXAWARE,Hexaware Technologies
+LATENTVIEW,LatentView Analytics
+HAPPSTMNDS,Happiest Minds Technologies
+INTELLECT,Intellect Design Arena
+NEWGEN,Newgen Software Technologies
+RAMCOCEM,Ramco Cements
+RAMCOSYS,Ramco Systems
+ECLERX,eClerx Services
+FIRSTSOUR,FirstSource Solutions
+TEAMLEASE,TeamLease Services
+QUESS,Quess Corp
+THOMAS COOK,Thomas Cook India
+MSTCLTD,MSTC
+CONCOR,Container Corporation of India
+BLUEDART,Blue Dart Express
+ALLCARGO,Allcargo Logistics
+TCI,Transport Corporation of India
+MAHLOG,Mahindra Logistics
+GESHIP,Great Eastern Shipping
+SCI,Shipping Corporation of India
+GPPL,Gujarat Pipavav Port
+ADANIPORTS,Adani Ports & SEZ
+CASTROLIND,Castrol India
+HINDPETRO,Hindustan Petroleum Corporation
+MRPL,Mangalore Refinery and Petrochemicals
+OIL,Oil India
+PETRONET,Petronet LNG
+GSPL,Gujarat State Petronet
+MGL,Mahanagar Gas
+IGL,Indraprastha Gas
+GUJGASLTD,Gujarat Gas
+AETHER,Aether Industries
+CLEAN,Clean Science and Technology
+ROSSARI,Rossari Biotech
+SUDARSCHEM,Sudarshan Chemical Industries
+SUMICHEM,Sumitomo Chemical India
+VINSCIFLT,Vinati Organics
+VINATIORGA,Vinati Organics
+BASF,BASF India
+NOCIL,NOCIL
+GALAXYSURF,Galaxy Surfactants
+BALMLAWRIE,Balmer Lawrie & Company
+TRIL,Tata Realty
+LODHA,Macrotech Developers
+GODREJPROP,Godrej Properties
+DLF,DLF
+PRESTIGE,Prestige Estates Projects
+BRIGADE,Brigade Enterprises
+OBEROIRLTY,Oberoi Realty
+PHOENIXLTD,Phoenix Mills
+IBREALEST,Indiabulls Real Estate
+HEMIPROP,Hemisphere Properties India
+MAHLIFE,Mahindra Lifespace Developers
+KOLTEPATIL,Kolte-Patil Developers
+PURAVANK,Puravankara
+SUNTECK,Sunteck Realty
+SOBHA,Sobha
+INDIABULLS,Indiabulls Real Estate
+NESCO,NESCO
+NIRLON,Nirlon
+NETWORK18,Network18 Media & Investments
+TV18BRDCST,TV18 Broadcast
+ZEEL,Zee Entertainment Enterprises
+SUNTV,Sun TV Network
+PVRINOX,PVR INOX
+INOXLEISUR,INOX Leisure
+TIPS,TIPS Music
+SAREGAMA,Saregama India
+NAZARA,Nazara Technologies
+MAPMYINDIA,C.E. Info Systems
+INDIAMART,IndiaMART InterMESH
+JUSTDIAL,Just Dial
+RATEGAIN,RateGain Travel Technologies
+CARTRADE,CarTrade Tech
+POLICYBZR,PB Fintech
+NYKAA,FSN E-Commerce Ventures
+DELHIVERY,Delhivery
+ECOM,Ecom Express
+IRCTC,Indian Railway Catering & Tourism
+CAMPUS,Campus Activewear
+KAYNES,Kaynes Technology India
+SYRMA,Syrma SGS Technology
+AVALON,Avalon Technologies
+IDEAFORGE,ideaForge Technology
+DRONEACH,DroneAcharya Aerial Innovations
+DATAPATTNS,Data Patterns India
+BHARAT DYNAMICS,Bharat Dynamics
+MAZAGON,Mazagon Dock Shipbuilders
+PARAS DENFAB,Paras Defence and Space Technologies
+MTAR,MTAR Technologies
+CENTUM,Centum Electronics
+DCX,DCX Systems
+SBFC,SBFC Finance
+UGROCAP,Ugro Capital
+IIFL,IIFL Finance
+FIVESTAR,Five-Star Business Finance
+ARMAN,Arman Financial Services
+CHOLA,Cholamandalam Financial Holdings
+PIRAMAL,Piramal Enterprises
+JBFIN,JB Financial
+EQUITASBNK,Equitas Small Finance Bank
+ESAFSFB,ESAF Small Finance Bank
+SURYODAY,Suryoday Small Finance Bank
+JANA,Jana Small Finance Bank
+NORDUS,Nord Industries
+ABCAPITAL,Aditya Birla Capital
+IIFLWAM,IIFL Wealth Management
+360ONE,360 One WAM
+NUVAMA,Nuvama Wealth Management
+GEOJIT,Geojit Financial Services
+HDFCSEC,HDFC Securities
+BAJAJHLDNG,Bajaj Holdings & Investment
+IEPFA,IEPFA
+BANKINDIA,Bank of India
+IOB,Indian Overseas Bank
+UCO,UCO Bank
+UCOBANK,UCO Bank
+CENTRALBNK,Central Bank of India
+MAHBANK,Maharashtra Bank
+KARURVYSYA,Karur Vysya Bank
+CITYUNION,City Union Bank
+DCBBANK,DCB Bank
+LAKMESH,Lakshmi Vilas Bank
+SOUTHBNK,South Indian Bank
+TMBBANK,TMB Bank
+JKBANK,Jammu & Kashmir Bank
+KTKBANK,Karnataka Bank
+SARASWATBK,Saraswat Bank
+TATAINVEST,Tata Investment Corporation
+BALRAMCHIN,Balrampur Chini Mills
+TRIVENI,Triveni Engineering & Industries
+DHAMPUR,Dhampur Sugar Mills
+EID,EID Parry
+RENUKA,Shree Renuka Sugars
+UTTAMSUGAR,Uttam Sugar Mills
+DOLAT,Dolat Investments
+MAHSCOOTER,Maharashtra Scooters
+SMLISUZU,SML Isuzu
+ESCORTS,Escorts Kubota
+FORCEMOT,Force Motors
+GREAVES,Greaves Cotton
+MINDA,Minda Corporation
+MINDAIND,Minda Industries
+SANDHAR,Sandhar Technologies
+SUBROS,Subros
+SUNDRMBRAK,Sundaram Brake Linings
+BOMDYEING,Bombay Dyeing
+CENTURYTEX,Century Textiles & Industries
+WELSPUN,Welspun India
+HIMATSEIDE,Himatsingka Seide
+DONEAR,Donear Industries
+NIITLTD,NIIT
+APTECH,Aptech
+CAREER,Career Point
+SANSERA,Sansera Engineering
+CRAFTSMAN,Craftsman Automation
+DYNAMATIC,Dynamatic Technologies
+GABRIEL,Gabriel India
+JMT AUTO,JMT Auto
+JAMNAAUTO,Jamna Auto Industries
+SETCO,Setco Automotive
+MHRIL,Mahindra Holidays & Resorts
+LEMONTRE,Lemon Tree Hotels
+CHALET,Chalet Hotels
+INDHOTEL,The Indian Hotels Company
+EIHOTEL,EIH
+TAJGVK,Taj GVK Hotels & Resorts
+ITCHOTELS,ITC Hotels
+SPENCERS,Spencer's Retail
+SHOPERSTOP,Shoppers Stop
+VMART,V-Mart Retail
+GLOBUSSPR,Globus Spirits
+RADICO,Radico Khaitan
+GMMPFAUDLR,GMM Pfaudler
+APCOTEX,Apcotex Industries
+GOLDENTOBC,Golden Tobacco
+SWSOLAR,Sterling and Wilson Renewable Energy
+WEBSOL,Websol Energy System
+BOROSIL,Borosil Renewables
+WAAREE,Waaree Energies
+PREMIER,Premier Energies
+WEBSOL,Websol Energy System
+WINDLAS,Windlas Biotech
+TATVA,Tatva Chintan Pharma Chem
+CHEMCON,Chemcon Speciality Chemicals
+CLEAN,Clean Science and Technology
+DEEPERND,Deepak Fertilisers
+DEEPAKFER,Deepak Fertilisers and Petrochemicals
+GSFC,Gujarat State Fertilizers & Chemicals
+COROMANDEL,Coromandel International
+PIIND,PI Industries
+RALLIS,Rallis India
+TATA CHEMI,Tata Chemicals
+GHCL,GHCL
+TINSPLATE,Tata Tinplate Company of India
+TITAGARH,Titagarh Rail Systems
+TEXRAIL,Texmaco Rail & Engineering
+KALINDI,Kalindee Rail Nirman
+RVNL,Rail Vikas Nigam
+IRCON,IRCON International
+HPCL,Hindustan Petroleum Corporation
+GUJSTATPET,Gujarat State Petronet
+SEPC,SEPC
+MOIL,MOIL
+GMDC,Gujarat Mineral Development Corporation
+KIOCL,Kiocl
+MTNL,Mahanagar Telephone Nigam
+BSNL,BSNL
+TATACOMM,Tata Communications
+BHARTIHEXA,Bharti Hexacom
+HCLINFOSYS,HCL Infosystems
+RCOM,Reliance Communications
+IDEA,Vodafone Idea
