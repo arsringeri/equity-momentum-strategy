@@ -30,15 +30,7 @@ public class MomentumConfig {
         } catch (IOException ignored) {}
     }
 
-    // --- Kite ---
-
-    public String getApiKey() {
-        return props.getProperty("kite.api_key", "").trim();
-    }
-
-    public String getTokenFile() {
-        return props.getProperty("kite.token_file", "C:/Input/store.txt").trim();
-    }
+    // (Kite credentials are handled by KiteSessionManager, not stored here)
 
     // --- Portfolio ---
 

@@ -84,14 +84,6 @@ public class MomentumApp extends JFrame {
             return;
         }
 
-        // Validate api key
-        if (config.getApiKey().equals("YOUR_API_KEY_HERE") || config.getApiKey().isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Please set kite.api_key in momentum.properties before running.",
-                    "API Key Missing", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
         // Clear previous results
         chartPanel.clear();
         dailyTable.clear();
