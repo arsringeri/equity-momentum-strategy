@@ -104,6 +104,66 @@ public class KitePriceDataProvider implements PriceDataProvider {
             throw new Exception("NSE instrument catalogue returned 0 instruments.");
         }
 
+        // ---- Sanity fetch: verify daily data works before bulk run ----
+        // Fetch RELIANCE for the last 7 calendar days.
+        // If this returns empty we know immediately that historical data is broken,
+        // saving 5+ minutes of silent failures across 549 symbols.
+        LOG.info("Sanity check: fetching RELIANCE daily data for last 7 days...");
+        Long relianceToken = symbolToToken.get("RELIANCE");
+        if (relianceToken != null) {
+            Calendar sanCal = Calendar.getInstance();
+            Date sanTo   = sanCal.getTime();
+            sanCal.add(Calendar.DATE, -10);   // 10 calendar days back covers ~7 trading days
+            Date sanFrom = sanCal.getTime();
+            try {
+                HistoricalData sanResult;
+                try {
+                    sanResult = kite.getHistoricalData(
+                            sanFrom, sanTo, String.valueOf(relianceToken), "day", false, false);
+                } catch (com.zerodhatech.kiteconnect.kitehttp.exceptions.KiteException ke) {
+                    LOG.severe("Sanity fetch KiteException: code=" + ke.code + " msg=" + ke.getMessage());
+                    throw new Exception("Kite API error on sanity fetch: " + ke.getMessage(), ke);
+                }
+
+                if (sanResult == null) {
+                    LOG.severe("Sanity fetch: getHistoricalData returned NULL for RELIANCE. "
+                            + "The Kite SDK may have an issue with the 'day' interval.");
+                    throw new Exception("Kite getHistoricalData returned null for RELIANCE — "
+                            + "check SDK version or interval parameter.");
+                }
+
+                int candles = (sanResult.dataArrayList != null) ? sanResult.dataArrayList.size() : 0;
+                if (candles == 0) {
+                    LOG.severe("Sanity fetch: RELIANCE returned 0 candles for range ["
+                            + fmtDate(sanFrom) + " → " + fmtDate(sanTo) + "]. "
+                            + "Possible causes: (1) today is a weekend/holiday, "
+                            + "(2) the 'day' interval string is wrong, "
+                            + "(3) Kite API returned data in an unexpected structure.");
+                    // Log raw result for debugging
+                    LOG.severe("Raw HistoricalData object: dataArrayList="
+                            + sanResult.dataArrayList
+                            + "  open=" + sanResult.open
+                            + "  close=" + sanResult.close);
+                    throw new Exception(
+                        "RELIANCE daily data returned 0 candles — bulk fetch will also return 0.\n"
+                        + "Check: (1) Is today a trading holiday? "
+                        + "(2) Try a different date range.");
+                }
+
+                LOG.info("Sanity fetch OK — RELIANCE returned " + candles + " daily candles"
+                        + "  lastClose=" + sanResult.dataArrayList.get(candles - 1).close
+                        + "  lastDate="  + sanResult.dataArrayList.get(candles - 1).timeStamp);
+
+            } catch (Exception e) {
+                if (e.getMessage() != null && e.getMessage().contains("candles")) throw e; // rethrow our own
+                LOG.severe("Sanity fetch FAILED for RELIANCE: " + e.getClass().getSimpleName()
+                        + ": " + e.getMessage());
+                throw new Exception("Kite historical data sanity check failed: " + e.getMessage(), e);
+            }
+        } else {
+            LOG.warning("RELIANCE not found in instrument catalogue — skipping sanity fetch");
+        }
+
         // Reset session counters
         fetchedCount   = 0;
         skippedNoToken = 0;
@@ -153,23 +213,29 @@ public class KitePriceDataProvider implements PriceDataProvider {
             return Collections.emptyList();
         }
 
-        LOG.fine("Fetching daily prices — symbol=" + symbol
-                + "  token=" + token
-                + "  from=" + fmtDate(from)
-                + "  to=" + fmtDate(to));
+        LOG.info("Fetching [" + symbol + "]  token=" + token
+                + "  from=" + fmtDate(from) + "  to=" + fmtDate(to));
 
         HistoricalData result;
         try {
             result = kite.getHistoricalData(from, to, String.valueOf(token), "day", false, false);
         } catch (Throwable t) {
-            LOG.warning("getHistoricalData FAILED for " + symbol + ": " + t.getMessage());
+            LOG.warning("getHistoricalData FAILED for " + symbol
+                    + ": " + t.getClass().getSimpleName() + ": " + t.getMessage());
             fetchErrors++;
             return Collections.emptyList();
         }
 
-        if (result == null || result.dataArrayList == null || result.dataArrayList.isEmpty()) {
-            LOG.fine("No data returned for " + symbol
-                    + " in range [" + fmtDate(from) + ", " + fmtDate(to) + "]");
+        if (result == null) {
+            LOG.warning("getHistoricalData returned NULL for " + symbol);
+            skippedNoData++;
+            return Collections.emptyList();
+        }
+
+        if (result.dataArrayList == null || result.dataArrayList.isEmpty()) {
+            LOG.warning("No daily candles returned for " + symbol
+                    + "  range=[" + fmtDate(from) + " → " + fmtDate(to) + "]"
+                    + "  result.open=" + result.open + "  result.close=" + result.close);
             skippedNoData++;
             return Collections.emptyList();
         }
@@ -184,10 +250,11 @@ public class KitePriceDataProvider implements PriceDataProvider {
         }
         prices.sort(Comparator.comparing(p -> p.date));
 
-        LOG.fine("Fetched " + prices.size() + " daily bars for " + symbol
-                + (parseErrors > 0 ? "  (parseErrors=" + parseErrors + ")" : "")
+        LOG.info("  OK " + symbol + " — " + prices.size() + " candles"
+                + (parseErrors > 0 ? "  parseErrors=" + parseErrors : "")
                 + "  first=" + fmtDate(prices.get(0).date)
-                + "  last="  + fmtDate(prices.get(prices.size() - 1).date));
+                + "  last="  + fmtDate(prices.get(prices.size() - 1).date)
+                + "  lastClose=" + prices.get(prices.size() - 1).close);
 
         fetchedCount++;
         sleep();
